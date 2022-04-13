@@ -1,0 +1,29 @@
+{
+  "name":"kitchensink",
+  "description":"kitchensink workflow",
+  "version":1,
+  "inputParameters": [
+    "uid",
+    "imei",
+    "phone"
+  ],
+  "tasks":
+    {
+      "1": {
+        "name":"sub_workflow",
+        "taskReferenceName":"task_1",
+        "inputParameters":{
+          "mod":"${workflow.input.mod}",
+          "oddEven":"${workflow.input.oddEven}"
+        },
+        "type":"SIMPLE"
+      }
+    },
+
+  "outputParameters":{
+    "statues":"${get_es_1.output..status}",
+    "workflowIds":"${get_es_1.output..workflowId}"
+  },
+  "ownerEmail":"example@email.com",
+  "schemaVersion":2
+}
