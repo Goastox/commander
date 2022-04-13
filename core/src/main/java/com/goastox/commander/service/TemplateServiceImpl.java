@@ -1,13 +1,16 @@
 package com.goastox.commander.service;
 
+import com.goastox.commander.common.TaskType;
 import com.goastox.commander.common.template.TaskTemplate;
 import com.goastox.commander.common.template.WorkflowTemplate;
 import com.goastox.commander.core.Painter;
 import com.goastox.commander.exception.ApplicationException;
 import com.goastox.commander.exception.ApplicationException.Code;
 import com.goastox.commander.mapper.MetadataMapper;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,13 +30,15 @@ public class TemplateServiceImpl {
             throw new ApplicationException(Code.INVALID_INPUT,
                     "Workflow name cannot contain the following set of characters: ':'");
         }
+        Map<Integer, TaskTemplate> map = workflowTemplate.getTasks();
+        HashMap<Integer, int[]> next = Maps.newHashMapWithExpectedSize(map.size());
+        HashMap<Integer, TaskType> type = Maps.newHashMapWithExpectedSize(map.size());
+        map.forEach( (k,v)->{
+            next.put(k,v.getNext());
+            type.put(k, v.getTaskType());
+        });
 
-        Map<Integer, TaskTemplate> tasks = workflowTemplate.getTasks();
-
-        Map<Integer, int[]> collect = tasks.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getNext()));
-
-        Map<Integer, AtomicLong> painter = Painter.create(collect).graph();
+        Map<Integer, AtomicLong> painter = Painter.create(next, type).graph();
 
         // TODO 子任务，同步，异步
 

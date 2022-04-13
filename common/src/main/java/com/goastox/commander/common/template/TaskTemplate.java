@@ -1,5 +1,6 @@
 package com.goastox.commander.common.template;
 
+import com.goastox.commander.common.TaskType;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ public class TaskTemplate {
     private Integer token;
     private String referenceName;
 
-    private String taskType;
+    private TaskType taskType;
 
     private Map<String, Object> inputParameters = new HashMap<>();
 

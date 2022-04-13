@@ -1,9 +1,11 @@
 package com.goastox.commander.core;
 
+import com.goastox.commander.common.TaskType;
 import com.goastox.commander.exception.ApplicationException;
 import com.goastox.commander.exception.ApplicationException.Code;
 import com.goastox.commander.utils.PreNumberConditions;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.util.*;
@@ -17,10 +19,11 @@ public final class Painter extends Protocol {
 
     private Map<Integer, AtomicLong> graph;
     private Map<Integer, int[]> tasks;
-    private final Queue<Integer> stack = new LinkedList();
+    private final Queue<Integer> stack = Lists.newLinkedList();
     private final HashMultimap<Integer, Integer> invertTasks = HashMultimap.create();
-    private final Map<Integer, Integer> weights = new HashMap<>();
-
+    private final Map<Integer, Integer> weights = Maps.newHashMap();
+    private Map<Integer, TaskType> typeMap;
+    private Set<Integer> inverted;
 
     public static final int GRAPH_MAX = 0x3f;
 
@@ -34,9 +37,10 @@ public final class Painter extends Protocol {
         return painter;
     }
 
-    public static Painter create(Map<Integer, int[]> map){
+    public static Painter create(Map<Integer, int[]> map, Map<Integer, TaskType> map2){
         Painter painter = create(map.size());
         painter.tasks = map;
+        painter.typeMap = map2;
         painter.invert();
         painter.initWeight();
         painter.cycleCheck();
@@ -61,7 +65,7 @@ public final class Painter extends Protocol {
                 .forEach((k,v)-> weights.put(k, v.size()));
     }
 
-    //加上回环检测
+    //回环检测
     public void cycleCheck(){
         while (!stack.isEmpty()) {
             invertTasks.removeAll(stack.poll()).stream().forEach( x -> {
@@ -70,20 +74,15 @@ public final class Painter extends Protocol {
                 }
             });
         }
+        inverted = invertTasks.keySet();
     }
 
-    public AtomicLong get(Integer token){
-        return this.graph.get(token);
-    }
-
-    public Node getNode(Integer token){
-        return new Node(this.graph.get(token));
-    }
-
-    //TODO 生成的有问题
     private Painter add(int token, int... follow){
         AtomicLong atomicLong = NodeBuilder.of()
                 .weight(this.weights.get(token))
+                .type(this.typeMap.get(token))
+                .relax(inverted.contains(token)? CYCLE : 0)//初始化最大值
+                .follow(follow)
                 .build();
         this.graph.put(token, atomicLong);
         return this;
@@ -98,7 +97,6 @@ public final class Painter extends Protocol {
         return this.graph;
     }
 
-
     public static Painter format(Map<Integer, AtomicLong> graph){
         return new Painter(graph);
     }
@@ -107,15 +105,24 @@ public final class Painter extends Protocol {
         return this.graph.get(token).get();
     }
 
+    public AtomicLong get(Integer token){
+        return this.graph.get(token);
+    }
+
+    public Node getNode(Integer token){
+        return new Node(this.graph.get(token));
+    }
+
+
+
     private boolean compareAndSet(long expect, long update, int token){
-        //修改失败逻辑处理
+        // TODO 修改失败逻辑处理
         if(!this.graph.get(token).compareAndSet(expect, update)){
             throw new ApplicationException(Code.BACKEND_ERROR, "修改失败");
         }
         return true;
     }
     // TODO 修改操作考虑是否有数据安全问题
-
     public void updateWeight(int state, int token){
         long node = this.get(token);
         PreNumberConditions<Long> of = PreNumberConditions.of(node);

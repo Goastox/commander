@@ -1,5 +1,6 @@
 package com.goastox.commander.core;
 
+import com.goastox.commander.common.TaskType;
 import com.goastox.commander.utils.PreNumberConditions;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -25,8 +26,8 @@ public final class NodeBuilder extends Protocol {
         this.weight = weight;
         return this;
     }
-    public NodeBuilder type(int type){
-        this.type = type;
+    public NodeBuilder type(TaskType type){
+        this.type = this.converter(type);
         return this;
     }
     public NodeBuilder relax(int relax){
@@ -56,6 +57,22 @@ public final class NodeBuilder extends Protocol {
 
     public static Node format(AtomicLong atomicLong){
         return new Node(atomicLong);
+    }
+
+
+    private static int converter(TaskType taskType){
+        switch (taskType){
+            case START_TASK:
+                return TYPE_START;
+            case END_TASK:
+                return TYPE_END;
+            case DECISION:
+                return TYPE_DECISION;
+            case DO_WHILE:
+                return TYPE_DO_WHILE;
+            default:
+                return TYPE_OTHER;
+        }
     }
 
 }

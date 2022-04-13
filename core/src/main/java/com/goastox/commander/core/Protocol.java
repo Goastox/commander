@@ -20,17 +20,19 @@ public abstract class Protocol {
     public static final long TYPE_MAX = 0xf << BIT_TYPE;
     public static final long FOLLOW_MAX = 0xffffffffffffL << BIT_FOLLOW;
 
-    public static final int FOLLOW_BIT = 6;
 
     public static final int CREATE = 0 << BIT_STATE;
     public static final int RUNNING = 1 << BIT_STATE;
     public static final int BLOCKED = 2 << BIT_STATE;
     public static final int STOP = 3 << BIT_STATE;
 
-    public static final int TYPE_START = 0 << BIT_TYPE;
-    public static final int TYPE_DECISION = 1 << BIT_TYPE;
-    public static final int TYPE_WHILE = 2 << BIT_TYPE;
-    public static final int TYPE_CYCLE = 0xe << BIT_TYPE;
-    public static final int TYPE_END = 0xf << BIT_TYPE;
+    public static final int TYPE_START = 0;
+    public static final int TYPE_DECISION = 1;
+    public static final int TYPE_DO_WHILE = 2;
+    public static final int TYPE_OTHER = 0xe;
+    public static final int TYPE_END = 0xf;
+
+    public static final int CYCLE = 0xf;
+    public static final int FOLLOW_BIT = 6;
 
 }
