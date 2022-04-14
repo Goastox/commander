@@ -20,10 +20,9 @@ public final class Painter extends Protocol {
     private Map<Integer, AtomicLong> graph;
     private Map<Integer, int[]> tasks;
     private final Queue<Integer> stack = Lists.newLinkedList();
-    private final HashMultimap<Integer, Integer> invertTasks = HashMultimap.create();
+    private final HashMultimap<Integer, Integer> inverted = HashMultimap.create();
     private final Map<Integer, Integer> weights = Maps.newHashMap();
     private Map<Integer, TaskType> typeMap;
-    private Set<Integer> inverted;
 
     public static final int GRAPH_MAX = 0x3f;
 
@@ -52,7 +51,7 @@ public final class Painter extends Protocol {
     private void invert(){
         tasks.forEach((k, v) -> {
             if (v != null && v.length > 0) {
-                Arrays.stream(v).forEach(x -> invertTasks.put(x, k));
+                Arrays.stream(v).forEach(x -> inverted.put(x, k));
             } else {
                 //没有下游节点
                 stack.offer(k);
@@ -61,27 +60,26 @@ public final class Painter extends Protocol {
     }
 
     private void initWeight(){
-        invertTasks.asMap()
+        inverted.asMap()
                 .forEach((k,v)-> weights.put(k, v.size()));
     }
 
     //回环检测
     public void cycleCheck(){
         while (!stack.isEmpty()) {
-            invertTasks.removeAll(stack.poll()).stream().forEach( x -> {
-                if(!invertTasks.containsValue(x)){
+            inverted.removeAll(stack.poll()).stream().forEach(x -> {
+                if(!inverted.containsValue(x)){
                     stack.offer(x);
                 }
             });
         }
-        inverted = invertTasks.keySet();
     }
 
     private Painter add(int token, int... follow){
         AtomicLong atomicLong = NodeBuilder.of()
                 .weight(this.weights.get(token))
                 .type(this.typeMap.get(token))
-                .relax(inverted.contains(token)? CYCLE : 0)//初始化最大值
+                .relax(inverted.keySet().contains(token)? CYCLE : 0)//初始化最大值
                 .follow(follow)
                 .build();
         this.graph.put(token, atomicLong);
@@ -140,7 +138,7 @@ public final class Painter extends Protocol {
 
     }
 
-    public void createToRuning(int token){
+    public void createToRunning(int token){
         long node = this.get(token);
         this.compareAndSet(node, node & (~STATE_MAX) | RUNNING, token);
     }
