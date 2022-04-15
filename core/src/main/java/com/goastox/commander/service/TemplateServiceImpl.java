@@ -13,17 +13,15 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Service
 public class TemplateServiceImpl {
 
-    private final MetadataMapper metadataMapper;
 
-    public TemplateServiceImpl(MetadataMapper metadataMapper) {
-        this.metadataMapper = metadataMapper;
-    }
+    private MetadataMapper metadataMapper;
 
     public void registerWorkflowTemplate(WorkflowTemplate workflowTemplate){
         if(workflowTemplate.getName().contains(":")){
@@ -37,13 +35,14 @@ public class TemplateServiceImpl {
             next.put(k,v.getNext());
             type.put(k, v.getTaskType());
         });
-
-        Map<Integer, AtomicLong> painter = Painter.create(next, type).graph();
-
-        // TODO 子任务，同步，异步
-
+        Painter painter = Painter.create(next, type);
+        workflowTemplate.setPainter(painter.graph());
         workflowTemplate.setCreateTime(System.currentTimeMillis());
         metadataMapper.createWorkflowTemplate(workflowTemplate);
+        Set<Integer> inverted = painter.getInverted();
+        if(!inverted.isEmpty()){
+            throw new ApplicationException(Code.WARNING_INPUT, String.format("警告循环提醒 %s", inverted.toString()));
+        }
     }
 
 

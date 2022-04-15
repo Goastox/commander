@@ -7,6 +7,7 @@ import com.goastox.commander.utils.PreNumberConditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multiset;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -89,6 +90,10 @@ public final class Painter extends Protocol {
     public Painter addAll(Map<Integer, int[]> map){
         map.forEach(this::add);
         return this;
+    }
+
+    public Set<Integer> getInverted(){
+        return this.inverted.keySet();
     }
 
     public Map<Integer, AtomicLong> graph(){

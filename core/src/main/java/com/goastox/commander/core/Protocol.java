@@ -7,6 +7,8 @@ public abstract class Protocol {
      * 9-12 表示节点出现了环，  relax
      * 13-16 节点类型
      * 17-64 表示当前节点的下游节点ID
+     *
+     * //TODO 考虑一下skip
      */
     public static final int BIT_STATE = 0;
     public static final int BIT_WEIGHT = 4;

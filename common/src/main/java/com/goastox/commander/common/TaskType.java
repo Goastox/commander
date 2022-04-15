@@ -27,4 +27,6 @@ public enum TaskType {
     TaskType(boolean isSystemTask) {
         this.isSystemTask = isSystemTask;
     }
+
+    // TODO 考虑是否支持其他语言，如果是解释型考虑是否进行预编译
 }
