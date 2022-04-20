@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Component
-public class SimpleTask implements ITask{
+public class HttpTask implements ITask{
     @Override
     public boolean execute() {
         return true;

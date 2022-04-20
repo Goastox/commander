@@ -126,11 +126,11 @@ public final class Painter extends Protocol {
         return true;
     }
     // TODO 修改操作考虑是否有数据安全问题
-    public void updateWeight(int state, int token){
+    public void updateWeight(int weight, int token){
         long node = this.get(token);
         PreNumberConditions<Long> of = PreNumberConditions.of(node);
         if(of.isPresent()){
-            this.compareAndSet(node, (node & (~WEIGHT_MAX)) | (state << BIT_WEIGHT), token);
+            this.compareAndSet(node, (node & (~WEIGHT_MAX)) | (weight << BIT_WEIGHT), token);
         }
     }
 

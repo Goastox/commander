@@ -29,7 +29,8 @@ public class Workflow extends Auditable {
 
     private WorkflowTemplate template;
 
-    private Map<Integer, AtomicLong> painter;
+    private Map<Integer, AtomicLong> graph;
+    private Integer startToken;
 
 
 

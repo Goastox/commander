@@ -37,4 +37,6 @@ public abstract class Protocol {
     public static final int CYCLE = 0xf;
     public static final int FOLLOW_BIT = 6;
 
+    public static final int WEIGHT_PASS = 0;
+
 }

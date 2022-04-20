@@ -41,7 +41,8 @@ public class TemplateServiceImpl {
         metadataMapper.createWorkflowTemplate(workflowTemplate);
         Set<Integer> inverted = painter.getInverted();
         if(!inverted.isEmpty()){
-            throw new ApplicationException(Code.WARNING_INPUT, String.format("警告循环提醒 %s", inverted.toString()));
+            throw new ApplicationException(Code.WARNING_INPUT,
+                    String.format("警告循环提醒 %s", inverted.toString()));
         }
     }
 
