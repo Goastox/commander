@@ -26,7 +26,17 @@ public abstract class Protocol {
     public static final int CREATE = 0 << BIT_STATE;
     public static final int RUNNING = 1 << BIT_STATE;
     public static final int BLOCKED = 2 << BIT_STATE;
-    public static final int STOP = 3 << BIT_STATE;
+
+    public static final int COMPLETED = 3 << BIT_STATE;
+
+    public static final int SKIPPED = 4 << BIT_STATE;
+
+    public static final int FAILED = 12 << BIT_STATE;
+
+    public static final int TIMED_OUT = 13 << BIT_STATE;
+
+    public static final int CANCELED = 14 >> BIT_STATE;
+
 
     public static final int TYPE_START = 0;
     public static final int TYPE_DECISION = 1;

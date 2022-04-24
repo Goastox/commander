@@ -1,30 +1,40 @@
 package com.goastox.commander.task;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.goastox.commander.common.TaskType;
+import com.goastox.commander.common.entity.Task;
+import com.goastox.commander.core.Node;
+import com.goastox.commander.execution.ContextWorkflow;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class WorkflowTask implements ITask{
+public abstract class WorkflowTask{
 
 
-    public Map<String, ITask> registry;
-
-    public WorkflowTask(Map<String, ITask> registry) {
-        this.registry = registry;
-    }
-
+    public static Map<TaskType, WorkflowTask> registry = new HashMap<>();
     public WorkflowTask(){}
-
-    public static WorkflowTask get(String type){
-//        return registry.get(type);
-        return null;
+    public WorkflowTask(TaskType type){
+        registry.put(type, this);
     }
 
-    @Override
-    public boolean execute() {
+    public static WorkflowTask get(TaskType type){
+        return registry.get(type);
+    }
+
+    public boolean execute(Task task, ContextWorkflow contextWorkflow, Map<Integer, Node> graph){
+        return true;
+    }
+
+    public void start(){
+    }
+
+    public boolean isAsync() {
         return false;
+    }
+
+    public void relax(){
+
     }
 }

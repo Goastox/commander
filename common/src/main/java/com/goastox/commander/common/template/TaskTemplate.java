@@ -9,19 +9,17 @@ import java.util.Map;
 public class TaskTemplate {
 
     private Integer token;
+
     private String referenceName;
-
-    private TaskType taskType;
-
+    private TaskType type;
+    private int[] next;
     private Map<String, Object> inputParameters = new HashMap<>();
 
-    private String caseParam;//分支参数
+    //分支参数
+    private String caseParam;
     private String caseExpression;
     private String scriptExpression;
-
     private Map<String, Integer> decisionCases = new HashMap<>();//可选项
-    private int[] next;
-    //fork
 
     private int startDelay;
 

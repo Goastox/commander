@@ -2,7 +2,10 @@ package com.goastox.commander.core;
 
 import com.goastox.commander.common.TaskType;
 import com.goastox.commander.utils.PreNumberConditions;
+import com.google.common.collect.Maps;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.IntStream;
 
@@ -59,9 +62,15 @@ public final class NodeBuilder extends Protocol {
         return new Node(atomicLong);
     }
 
+    public static Map<Integer, Node> format(Map<Integer, AtomicLong> graph){
+        HashMap<Integer, Node> map = Maps.newHashMapWithExpectedSize(graph.size());
+        graph.forEach((k,v) -> map.put(k, format(v)));
+        return map;
+    }
 
-    private static int converter(TaskType taskType){
-        switch (taskType){
+
+    private static int converter(TaskType type){
+        switch (type){
             case START_TASK:
                 return TYPE_START;
             case END_TASK:

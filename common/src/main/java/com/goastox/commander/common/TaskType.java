@@ -28,5 +28,7 @@ public enum TaskType {
         this.isSystemTask = isSystemTask;
     }
 
+    // TODO 考虑不同任务走不同的线程池，或者是相关处理
+
     // TODO 考虑是否支持其他语言，如果是解释型考虑是否进行预编译
 }

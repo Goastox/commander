@@ -9,9 +9,9 @@ import java.util.Map;
 public class Task {
 
 //    private int seq;
-
+    private Integer token;
     private long taskId;
-    private String taskType;
+    private String type;
 
     private String referenceTaskName;
 

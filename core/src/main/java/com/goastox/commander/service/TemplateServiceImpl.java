@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Service
 public class TemplateServiceImpl {
@@ -33,7 +31,7 @@ public class TemplateServiceImpl {
         HashMap<Integer, TaskType> type = Maps.newHashMapWithExpectedSize(map.size());
         map.forEach( (k,v)->{
             next.put(k,v.getNext());
-            type.put(k, v.getTaskType());
+            type.put(k, v.getType());
         });
         Painter painter = Painter.create(next, type);
         workflowTemplate.setPainter(painter.graph());

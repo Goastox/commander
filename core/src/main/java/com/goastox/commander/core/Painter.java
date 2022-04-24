@@ -27,9 +27,6 @@ public final class Painter extends Protocol {
 
     public static final int GRAPH_MAX = 0x3f;
 
-    //当前节点
-    private int present;
-
     private static Painter create(int size){
         PreNumberConditions.of(size).min(0).max(GRAPH_MAX);
         Painter painter = new Painter();
@@ -100,10 +97,6 @@ public final class Painter extends Protocol {
         return this.graph;
     }
 
-    public static Painter format(Map<Integer, AtomicLong> graph){
-        return new Painter(graph);
-    }
-
     private long get(int token){
         return this.graph.get(token).get();
     }
@@ -112,55 +105,5 @@ public final class Painter extends Protocol {
         return this.graph.get(token);
     }
 
-    public Node getNode(Integer token){
-        return new Node(this.graph.get(token));
-    }
 
-
-
-    private boolean compareAndSet(long expect, long update, int token){
-        // TODO 修改失败逻辑处理
-        if(!this.graph.get(token).compareAndSet(expect, update)){
-            throw new ApplicationException(Code.BACKEND_ERROR, "修改失败");
-        }
-        return true;
-    }
-    // TODO 修改操作考虑是否有数据安全问题
-    public void updateWeight(int weight, int token){
-        long node = this.get(token);
-        PreNumberConditions<Long> of = PreNumberConditions.of(node);
-        if(of.isPresent()){
-            this.compareAndSet(node, (node & (~WEIGHT_MAX)) | (weight << BIT_WEIGHT), token);
-        }
-    }
-
-    // TODO 负权节点需要考虑修改负权
-
-
-    // 修改节点的下游节点
-    //TODO 只有分叉类型需要修改下游节点
-    public void updateFollow(){
-
-    }
-
-    public void createToRunning(int token){
-        long node = this.get(token);
-        this.compareAndSet(node, node & (~STATE_MAX) | RUNNING, token);
-    }
-    public void createToBlocked(int token){
-        long node = this.get(token);
-        this.compareAndSet(node, node & (~STATE_MAX) | BLOCKED, token);
-    }
-    public void runningToBlocked(int token){
-        long node = this.get(token);
-        this.compareAndSet(node, node & (~STATE_MAX) | BLOCKED, token);
-    }
-    public void blockedToRunning(int token){
-        long node = this.get(token);
-        this.compareAndSet(node, node & (~STATE_MAX) | RUNNING, token);
-    }
-    public void runningToStop(int token){
-        long node = this.get(token);
-        this.compareAndSet(node, node & (~STATE_MAX) | STOP, token);
-    }
 }
