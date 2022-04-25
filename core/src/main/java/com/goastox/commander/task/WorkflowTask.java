@@ -12,6 +12,7 @@ import java.util.Map;
 @Component
 public abstract class WorkflowTask{
 
+    // TODO 记录节点执行过程，便于回溯
 
     public static Map<TaskType, WorkflowTask> registry = new HashMap<>();
     public WorkflowTask(){}
@@ -23,8 +24,8 @@ public abstract class WorkflowTask{
         return registry.get(type);
     }
 
-    public boolean execute(Task task, ContextWorkflow contextWorkflow, Map<Integer, Node> graph){
-        return true;
+    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph){
+        return null;
     }
 
     public void start(){
@@ -37,4 +38,10 @@ public abstract class WorkflowTask{
     public void relax(){
 
     }
+
+    public final void callback(ContextWorkflow contextWorkflow, Map<Integer, Node> graph){
+        Task task = this.execute(contextWorkflow, graph);
+        contextWorkflow.decide(task.getToken());
+    }
+
 }

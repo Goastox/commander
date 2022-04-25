@@ -24,22 +24,24 @@ public class ContextWorkflow {
     private Map<String, Object> contextInput;
     private Map<String, Object> contextOutput;
 
-    //图
     private Map<Integer, Node> painter;
 
     private Map<Integer, TaskTemplate> tasks;
 
     @Resource(name = "simpleThreadPool")
     private ExecutorService service;
-    public void decide(Integer token){
+    public void decide(Integer token){// 入参当前已执行成功的 token
         Node node = this.painter.get(token);
-        if (node.getWeight() == 0){//判断各种情况的状态
-            Arrays.stream(node.followToArray()).forEach(x -> {
-                service.execute(()->{
-                    Task task = new Task();
-//                    WorkflowTask.get(tasks.get(token).getType()).execute(task, this);
-                });
-            });
+        if (node.stateOf_COMPLETED()){//判断各种情况的状态
+            Arrays.stream(node.followToArray())
+                .filter(x -> {//判断权值是否为0  环路逻辑处理
+                    return this.painter.get(x).weightOf_ZERO();
+                })
+                .forEach(x -> {
+                    service.execute(()->{
+                            WorkflowTask.get(tasks.get(token).getType()).execute(this, painter);
+                        });
+                    });
         }
     }
 

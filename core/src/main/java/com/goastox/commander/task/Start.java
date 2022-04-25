@@ -4,11 +4,10 @@ import com.goastox.commander.common.TaskType;
 import com.goastox.commander.common.entity.Task;
 import com.goastox.commander.core.Node;
 import com.goastox.commander.execution.ContextWorkflow;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-
-import static com.goastox.commander.core.Protocol.COMPLETED;
-
+@Slf4j
 public class Start extends WorkflowTask {
 
     public Start() {
@@ -16,8 +15,10 @@ public class Start extends WorkflowTask {
     }
 
     @Override
-    public boolean execute(Task task, ContextWorkflow contextWorkflow, Map<Integer, Node> graph) {
-        graph.get(task.getToken()).updateWeight(COMPLETED);
-        return true;
+    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph) {
+        Task task = new Task();
+        graph.get(task).toCompleted();
+        log.info("首节点success");
+        return task;
     }
 }

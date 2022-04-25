@@ -47,11 +47,8 @@ public class ExecutionWorkflow {
         HashMap<String, Object> map = new HashMap<>();
         input.forEach( (k,v) -> map.put("workflow.input." +k, v) );
         context.setContextInput(map);
-        boolean execute = WorkflowTask.get(TaskType.START_TASK).execute(new Task(), context, graph);
-        context.decide(workflow.getStartToken());
 
-//        TODO 吊起首节点
-
+        WorkflowTask.get(TaskType.START_TASK).callback(context, graph);
 
         return null;
     }

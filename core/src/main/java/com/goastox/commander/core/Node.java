@@ -1,13 +1,12 @@
 package com.goastox.commander.core;
 
 import com.goastox.commander.exception.ApplicationException;
-import com.goastox.commander.utils.PreNumberConditions;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.LongStream;
 
-import static com.goastox.commander.core.Protocol.*;
 import static com.goastox.commander.core.Painter.GRAPH_MAX;
+import static com.goastox.commander.core.Protocol.*;
 
 public class Node {
 
@@ -40,7 +39,9 @@ public class Node {
     }
 
 
-
+    public boolean stateOf_COMPLETED(){
+        return (node.get() & WEIGHT_MAX) == COMPLETED;
+    }
 
 
     private boolean compareAndSet(long expect, long update){
@@ -55,6 +56,14 @@ public class Node {
         this.compareAndSet(node.get(), (node.get() & (~WEIGHT_MAX)) | (weight << BIT_WEIGHT));
     }
 
+    public int decrementWeight(){
+        int weight = this.getWeight() - 1;
+        this.compareAndSet(node.get(), (node.get() & (~WEIGHT_MAX)) | ( weight << BIT_WEIGHT));
+        return weight;
+    }
+
+
+
     // TODO 负权节点需要考虑修改负权
 
 
@@ -64,12 +73,33 @@ public class Node {
 
     }
 
-    public void createToRunning(){
+    public void toRunning(){
         this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | RUNNING);
     }
+    public void toCompleted(){
+        this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | COMPLETED);
+    }
 
-    public boolean weightOfZERO(){
-        return (node.get() & WEIGHT_MAX) >> BIT_WEIGHT == 0 ? true : false;
+    public void toFailed(){
+        this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | FAILED);
+    }
+    public void toCanceled(){
+        this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | CANCELED);
+    }
+
+    public void toTimeout(){
+        this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | TIMED_OUT);
+    }
+
+    public void toSkipped(){
+        this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | SKIPPED);
+    }
+
+
+
+
+    public boolean weightOf_ZERO(){
+        return (node.get() & WEIGHT_MAX) >> BIT_WEIGHT == WEIGHT_PASS;
     }
 
 
