@@ -12,14 +12,16 @@ public class ExecutionTask {
     // 执行task调用逻辑
 
 
-    @Bean(value = "simpleThreadPool")
-    public ExecutorService sim(){
+    @Bean
+    public ThreadPoolExecutor executor(){
         ThreadFactory name = new ThreadFactoryBuilder().setNameFormat("simple-thread-%d").build();
-        return new ThreadPoolExecutor(5,
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,
                 5,
                 0L,
                 TimeUnit.MILLISECONDS,
                 new ArrayBlockingQueue<>(5),
                 name, new ThreadPoolExecutor.AbortPolicy());
+
+        return threadPoolExecutor;
     }
 }

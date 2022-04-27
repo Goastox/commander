@@ -26,6 +26,8 @@ public class ExecutionWorkflow {
 
         // TODO 不需要考虑模板加锁问题
 
+        // TODO 除首节点之外其他token不能为0，切其他节点的下游节点不能是首节点
+
         // 验证入参
         String workflowId = IDgenerator.generator();
 
@@ -48,7 +50,7 @@ public class ExecutionWorkflow {
         input.forEach( (k,v) -> map.put("workflow.input." +k, v) );
         context.setContextInput(map);
 
-        WorkflowTask.get(TaskType.START_TASK).callback(context, graph);
+        WorkflowTask.get(TaskType.START_TASK).callback(context, graph, 0);
 
         return null;
     }

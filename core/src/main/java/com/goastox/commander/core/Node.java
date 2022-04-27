@@ -1,5 +1,6 @@
 package com.goastox.commander.core;
 
+import com.alibaba.fastjson.JSONObject;
 import com.goastox.commander.exception.ApplicationException;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -33,14 +34,15 @@ public class Node {
     }
 
     public int[] followToArray(){
-        return LongStream.range(0, getWeight())
-                .mapToInt(value -> (int) ((node.get() >> BIT_FOLLOW) & (GRAPH_MAX & (value * FOLLOW_BIT)) ))
+        return LongStream.range(0, 8)
+                .mapToInt(value -> {
+                    return (int) ((node.get() >> (BIT_FOLLOW + (value * FOLLOW_BIT))) & GRAPH_MAX);
+                })
                 .toArray();
     }
 
-
     public boolean stateOf_COMPLETED(){
-        return (node.get() & WEIGHT_MAX) == COMPLETED;
+        return (node.get() & STATE_MAX) == COMPLETED;
     }
 
 
@@ -79,6 +81,8 @@ public class Node {
     public void toCompleted(){
         this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | COMPLETED);
     }
+
+
 
     public void toFailed(){
         this.compareAndSet(node.get(), node.get() & (~STATE_MAX) | FAILED);

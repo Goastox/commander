@@ -1,10 +1,8 @@
 package com.goastox.commander.controller;
 
-import com.goastox.commander.common.template.WorkflowTemplate;
 import com.goastox.commander.service.WorkflowServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 import static com.goastox.commander.controller.RequestMappingConstants.WORKFLOW;

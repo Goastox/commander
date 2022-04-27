@@ -52,17 +52,19 @@ public final class NodeBuilder extends Protocol {
 
     // TODO LongAdder AtomicLong 怎么选择??
     public AtomicLong build(){
-        long node = (long) STATE & (weight << BIT_WEIGHT)
-                & (relax << BIT_RELAX) &(type << BIT_TYPE)
-                & (follow_sum << BIT_FOLLOW);
+        long node = (long) STATE | (weight << BIT_WEIGHT)
+                | (relax << BIT_RELAX) |(type << BIT_TYPE)
+                | (follow_sum << BIT_FOLLOW);
         return new AtomicLong(node);
     }
+
 
     public static Node format(AtomicLong atomicLong){
         return new Node(atomicLong);
     }
 
     public static Map<Integer, Node> format(Map<Integer, AtomicLong> graph){
+        //TODO 加判断
         HashMap<Integer, Node> map = Maps.newHashMapWithExpectedSize(graph.size());
         graph.forEach((k,v) -> map.put(k, format(v)));
         return map;

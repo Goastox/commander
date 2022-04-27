@@ -15,7 +15,11 @@ public class Http extends WorkflowTask{
     }
 
     @Override
-    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph) {
-        return super.execute(contextWorkflow, graph);
+    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
+        Task task = new Task();
+        System.out.println("HTTP 节点");
+        task.setToken(token);
+        graph.get(token).toCompleted();
+        return task;
     }
 }

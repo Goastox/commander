@@ -16,7 +16,7 @@ public class Simple extends WorkflowTask{
     }
 
     @Override
-    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph) {
-        return super.execute(contextWorkflow, graph);
+    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
+        return super.execute(contextWorkflow, graph, token);
     }
 }

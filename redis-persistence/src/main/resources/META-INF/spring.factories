@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.goastox.commander.mapper.RedisMetadataMapper,\
+  com.goastox.commander.mapper.RedisWorkflowMapper

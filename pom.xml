@@ -20,6 +20,7 @@
         <module>client</module>
         <module>common</module>
         <module>server</module>
+        <module>redis-persistence</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -28,5 +29,20 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.8</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.79</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

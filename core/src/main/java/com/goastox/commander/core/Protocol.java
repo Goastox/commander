@@ -20,7 +20,17 @@ public abstract class Protocol {
     public static final long WEIGHT_MAX = 0xf << BIT_WEIGHT;
     public static final long RELAX_MAX = 0xf << BIT_RELAX;
     public static final long TYPE_MAX = 0xf << BIT_TYPE;
+
     public static final long FOLLOW_MAX = 0xffffffffffffL << BIT_FOLLOW;
+
+    public static final long FOLLOW_ONE = 0x3f0000;
+    public static final long FOLLOW_TWO = 0x7e0000;
+    public static final long FOLLOW_THREE = 0xfc0000;
+    public static final long FOLLOW_FOUR = 0x1f80000;
+    public static final long FOLLOW_FIVE = 0x3f00000;
+    public static final long FOLLOW_SIX = 0x7e00000;
+    public static final long FOLLOW_SEVEN = 0xfc00000;
+    public static final long FOLLOW_EIGHT = 0x1f800000;
 
 
     public static final int CREATE = 0 << BIT_STATE;
