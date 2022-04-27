@@ -43,6 +43,4 @@ public class WorkflowTemplate extends Auditable {
 
     private Map<Integer, AtomicLong> painter;
 
-    private Integer startToken;
-
 }

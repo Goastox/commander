@@ -11,6 +11,7 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.locks.Condition;
 
 @Data
 public class ContextWorkflow {
@@ -32,7 +33,7 @@ public class ContextWorkflow {
         Node node = this.painter.get(token);
         if (node.stateOf_COMPLETED()){//判断各种情况的状态
             Arrays.stream(node.followToArray())
-                .filter(x->x > 0)
+                .filter(x-> x > 0)
                 .filter(x -> {//判断权值是否为0  环路逻辑处理
                     return this.painter.get(x).decrementWeight() == 0;
                 })
@@ -43,6 +44,4 @@ public class ContextWorkflow {
                     });
         }
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.goastox.commander.utils;
 
 import com.goastox.commander.exception.ApplicationException;
 import com.goastox.commander.exception.ApplicationException.Code;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public final class PreNumberConditions<T extends Number> {
@@ -42,5 +43,8 @@ public final class PreNumberConditions<T extends Number> {
         }
         return this;
     }
+
+
+
 
 }

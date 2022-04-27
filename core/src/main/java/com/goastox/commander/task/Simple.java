@@ -7,6 +7,7 @@ import com.goastox.commander.execution.ContextWorkflow;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
 
 @Component
 public class Simple extends WorkflowTask{
@@ -17,6 +18,6 @@ public class Simple extends WorkflowTask{
 
     @Override
     public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
-        return super.execute(contextWorkflow, graph, token);
+        return null;
     }
 }

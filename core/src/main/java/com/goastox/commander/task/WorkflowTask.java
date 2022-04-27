@@ -41,7 +41,6 @@ public abstract class WorkflowTask{
 
     public final void callback(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token){
         Task task = this.execute(contextWorkflow, graph, token);
-
         contextWorkflow.decide(task.getToken());
     }
 

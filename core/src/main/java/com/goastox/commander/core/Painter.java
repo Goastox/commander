@@ -1,13 +1,11 @@
 package com.goastox.commander.core;
 
 import com.goastox.commander.common.TaskType;
-import com.goastox.commander.exception.ApplicationException;
-import com.goastox.commander.exception.ApplicationException.Code;
 import com.goastox.commander.utils.PreNumberConditions;
+import com.goastox.commander.utils.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multiset;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -25,22 +23,20 @@ public final class Painter extends Protocol {
     private final Map<Integer, Integer> weights = Maps.newHashMap();
     private Map<Integer, TaskType> typeMap;
 
-    private Integer startTask;
+    private Integer size;
 
     public static final int GRAPH_MAX = 0x3f;
 
-    public static Painter of(int size){
+    public static Painter size(int size){
         PreNumberConditions.of(size).min(0).max(GRAPH_MAX);
         Painter painter = new Painter();
+        painter.size = size;
         painter.graph = Maps.newLinkedHashMapWithExpectedSize(size);
+        painter.weights.put(0, 0);
         return painter;
     }
 
-    public Painter startTask(int token){
-        this.startTask = token;
-        this.weights.put(token, 0);
-        return this;
-    }
+
 
     public Painter tasks(Map<Integer, int[]> tasks){
         this.tasks = tasks;
@@ -57,9 +53,10 @@ public final class Painter extends Protocol {
         this.initWeight();
         this.cycleCheck();
         this.addAll(tasks);
+        Preconditions.checkArgument(this.graph.size() == this.size,
+                "Duplicate token");
         return this;
     }
-
 
     private void invert(){
         tasks.forEach((k, v) -> {
@@ -120,7 +117,4 @@ public final class Painter extends Protocol {
         return this.graph.get(token);
     }
 
-    public Integer getStartTask() {
-        return startTask;
-    }
 }
