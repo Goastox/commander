@@ -42,6 +42,7 @@ public class ExecutionWorkflow {
         HashMap<String, Object> map = new HashMap<>();
         input.forEach( (k,v) -> map.put("workflow.input." +k, v) );
         context.setContextInput(map);
+        //TODO 阻塞 还是参考netty设计思路
         new Start().callback(context, graph, 0);
 
         return null;
