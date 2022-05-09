@@ -1,84 +1,90 @@
 package com.goastox.commander.mapper;
 
-import com.alibaba.fastjson.JSONObject;
-import com.goastox.commander.common.TaskType;
-import com.goastox.commander.common.template.TaskTemplate;
+import com.alibaba.fastjson.JSON;
 import com.goastox.commander.common.template.WorkflowTemplate;
+import com.goastox.commander.exception.ApplicationException;
+import com.goastox.commander.exception.ApplicationException.Code;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
+import javax.annotation.Resource;
+import java.util.*;
 
 public class RedisMetadataMapper implements MetadataMapper{
+    private static final String TEMP_NAME = "workflow_template";
+
+    private static final String TEMP_NAME_ALL = "all_workflow_template_name";
+
+    private static final String NAMESPACE_SEP = ".";
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     @Override
-    public void createWorkflowTemplate(WorkflowTemplate workflowTemplate) {
+    public void createWorkflowTemplate(WorkflowTemplate temp) {
+        if(stringRedisTemplate.opsForHash().hasKey(nsKey(TEMP_NAME, temp.getName()), String.valueOf(temp.getVersion()))){
+            throw new ApplicationException(Code.INVALID_INPUT, temp.getName() + " already exists!");
+        }
+        this.createOrUpdate(temp);
     }
 
     @Override
-    public void updateWorkflowTemplate(WorkflowTemplate workflowTemplate) {
-
+    public void updateWorkflowTemplate(WorkflowTemplate temp) {
+        this.createOrUpdate(temp);
     }
 
     @Override
     public void removeWorkflowTemplate(String name, Integer version) {
-
+        Long result = stringRedisTemplate.opsForHash().delete(nsKey(TEMP_NAME, name), String.valueOf(version));
+        if(!result.equals(1L)){
+            throw new ApplicationException(Code.NOT_FOUND,
+                    String.format("Cannot remove the workflow - no such workflow  definition: %s version: %d", name, version));
+        }
     }
 
     @Override
     public List<WorkflowTemplate> getAllWorkflowTemplate() {
-        return null;
+        LinkedList<WorkflowTemplate> templates = new LinkedList<>();
+        Set<String> members = stringRedisTemplate.opsForSet().members(TEMP_NAME_ALL);
+        members.stream().forEach(x -> {
+            List<Object> values = stringRedisTemplate.opsForHash().values(nsKey(TEMP_NAME, x));
+            templates.addAll((List<WorkflowTemplate>)(Object)values);
+        });
+        return templates;
     }
 
     @Override
     public Optional<WorkflowTemplate> getWorkflowTemplate(String name, Integer version) {
-        WorkflowTemplate workflowTemplate = new WorkflowTemplate();
-        workflowTemplate.setName("test1");
-        workflowTemplate.setVersion(1);
-
-        TaskTemplate task = new TaskTemplate();
-        task.setToken(0);
-        task.setReferenceName("开始节点");
-        task.setType(TaskType.START_TASK);
-        task.setNext(new int[]{1,2});
-
-        TaskTemplate task1 = new TaskTemplate();
-        task1.setToken(1);
-        task1.setReferenceName("第一个节点");
-        task1.setType(TaskType.HTTP);
-        task1.setNext(new int[]{3});
-
-        TaskTemplate task2 = new TaskTemplate();
-        task2.setToken(2);
-        task2.setReferenceName("第二个节点");
-        task2.setType(TaskType.HTTP);
-        task2.setNext(new int[]{3});
-
-        TaskTemplate task3 = new TaskTemplate();
-        task3.setToken(3);
-        task3.setReferenceName("尾结点");
-        task3.setType(TaskType.END_TASK);
-
-        HashMap<Integer, TaskTemplate> map = new HashMap<>();
-        map.put(0, task);
-        map.put(1, task1);
-        map.put(2, task2);
-        map.put(3, task3);
-        workflowTemplate.setTasks(map);
-
-//        {0:8454144,1:253968,2:253968,3:61472}
-        HashMap<Integer, AtomicLong> graph = new HashMap<>();
-        graph.put(0,new AtomicLong(8454144));
-        graph.put(1,new AtomicLong(253968));
-        graph.put(2,new AtomicLong(253968));
-        graph.put(3,new AtomicLong(61472));
-        workflowTemplate.setPainter(graph);
-
-        return Optional.of(workflowTemplate);
+            Object o = stringRedisTemplate.opsForHash().get(nsKey(TEMP_NAME, name), String.valueOf(version));
+            WorkflowTemplate workflowTemplate = JSON.parseObject((String) o, WorkflowTemplate.class);
+            return Optional.of(workflowTemplate);
     }
 
     @Override
-    public Optional<WorkflowTemplate> getLastWorkflowTemplate(String name) {
+    public Optional<WorkflowTemplate> getLatestWorkflowTemplate(String name){
+        OptionalInt maxVersion = getWorkflowMaxVersion(name);
+        if (maxVersion.isPresent()){
+            Object o = stringRedisTemplate.opsForHash().get(nsKey(TEMP_NAME, name), String.valueOf(maxVersion.getAsInt()));
+            WorkflowTemplate workflowTemplate = JSON.parseObject((String) o, WorkflowTemplate.class);
+            return Optional.of(workflowTemplate);
+        }
         return Optional.empty();
+    }
+    private void createOrUpdate(WorkflowTemplate template){
+        stringRedisTemplate.opsForHash().put(nsKey(TEMP_NAME, template.getName()), String.valueOf(template.getVersion()), toJson(template));
+        stringRedisTemplate.opsForSet().add(nsKey(TEMP_NAME_ALL), template.getName());
+    }
+    private OptionalInt getWorkflowMaxVersion(String name){
+        return stringRedisTemplate.opsForHash().keys(nsKey(TEMP_NAME, name)).stream().mapToInt(x -> Integer.valueOf(x.toString())).max();
+    }
+
+    String nsKey(String... var){
+        //读取配置文件加前缀
+        StringBuffer stringBuffer = new StringBuffer();
+        Arrays.stream(var).forEach( v ->{
+            stringBuffer.append(v).append(NAMESPACE_SEP);
+        });
+        return StringUtils.removeEnd(stringBuffer.toString(), NAMESPACE_SEP);
+    }
+    String toJson(Object var){
+        return JSON.toJSONString(var);
     }
 }

@@ -24,9 +24,7 @@ public abstract class WorkflowTask{
         return registry.get(type);
     }
 
-    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token){
-        return null;
-    }
+    public abstract Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token);
 
     public void start(){
     }

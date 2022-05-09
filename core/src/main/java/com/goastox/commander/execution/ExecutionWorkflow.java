@@ -6,6 +6,7 @@ import com.goastox.commander.common.entity.Workflow;
 import com.goastox.commander.common.template.WorkflowTemplate;
 import com.goastox.commander.core.Node;
 import com.goastox.commander.core.NodeBuilder;
+import com.goastox.commander.task.Start;
 import com.goastox.commander.task.WorkflowTask;
 import com.goastox.commander.utils.IDgenerator;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class ExecutionWorkflow {
         HashMap<String, Object> map = new HashMap<>();
         input.forEach( (k,v) -> map.put("workflow.input." +k, v) );
         context.setContextInput(map);
-        WorkflowTask.get(TaskType.START_TASK).callback(context, graph, 0);
+        new Start().callback(context, graph, 0);
 
         return null;
     }

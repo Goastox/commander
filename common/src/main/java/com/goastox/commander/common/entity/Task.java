@@ -1,5 +1,6 @@
 package com.goastox.commander.common.entity;
 
+import com.goastox.commander.common.TaskType;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -8,10 +9,9 @@ import java.util.Map;
 @Data
 public class Task {
 
-//    private int seq;
     private Integer token;
-    private long taskId;
-    private String type;
+    private String taskId;
+    private TaskType type;
 
     private String referenceTaskName;
 

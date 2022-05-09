@@ -19,7 +19,7 @@ public class End extends WorkflowTask{
     public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
         Task task = new Task();
         task.setToken(token);
-        task.setType("END_TASK");
+        task.setType(TaskType.END_TASK);
         System.out.println("尾节点");
         graph.get(token).toCompleted();
         return task;

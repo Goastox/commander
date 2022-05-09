@@ -32,6 +32,7 @@ public class ContextWorkflow {
     public void decide(Integer token){// 入参当前已执行成功的 token
         Node node = this.painter.get(token);
         if (node.stateOf_COMPLETED()){//判断各种情况的状态
+                                        //判断是否是 end任务，吊起主线程
             Arrays.stream(node.followToArray())
                 .filter(x-> x > 0)
                 .filter(x -> {//判断权值是否为0  环路逻辑处理

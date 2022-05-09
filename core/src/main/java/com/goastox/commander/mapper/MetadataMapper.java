@@ -17,6 +17,6 @@ public interface MetadataMapper {
 
     Optional<WorkflowTemplate> getWorkflowTemplate(String name, Integer version);
 
-    Optional<WorkflowTemplate> getLastWorkflowTemplate(String name);
+    Optional<WorkflowTemplate> getLatestWorkflowTemplate(String name);
 
 }

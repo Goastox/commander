@@ -19,7 +19,7 @@ public class Http extends WorkflowTask{
     @Override
     public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
         Task task = new Task();
-        task.setType("HTTP");
+        task.setType(TaskType.HTTP);
         System.out.println("HTTP 节点");
         try {
             TimeUnit.SECONDS.sleep(10);

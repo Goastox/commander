@@ -13,10 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 @Slf4j
 @Service
 public class TemplateServiceImpl {
@@ -62,12 +60,25 @@ public class TemplateServiceImpl {
     public WorkflowTemplate getWorkflowTemplate(String name, Integer version){
         Optional<WorkflowTemplate> template;
         if (version == null){
-            template = metadataMapper.getLastWorkflowTemplate(name);
+            template = metadataMapper.getLatestWorkflowTemplate(name);
         }else{
             template = metadataMapper.getWorkflowTemplate(name, version);
         }
         return template.orElseThrow(()-> new ApplicationException(Code.NOT_FOUND,
                 String.format("No such workflow found by name: %s, version: %d", name, version)));
+    }
+
+    public List<WorkflowTemplate> getAll(){
+        return metadataMapper.getAllWorkflowTemplate();
+    }
+
+    public void unregisterWorkflowTemplate(String name, Integer version){
+        metadataMapper.removeWorkflowTemplate(name, version);
+    }
+
+    public void updateWorkflowTemplate(WorkflowTemplate template){
+        template.setUpdateTime(System.currentTimeMillis());
+        metadataMapper.updateWorkflowTemplate(template);
     }
 
 }

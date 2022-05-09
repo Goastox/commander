@@ -23,7 +23,7 @@ public class Start extends WorkflowTask {
     public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
         Map<Integer, TaskTemplate> tasks = contextWorkflow.getTasks();
         Task task = new Task();
-        task.setType("START_TASK");
+        task.setType(TaskType.START_TASK);
         task.setToken(token);
         graph.get(token).toCompleted();
         log.info("首节点success");
