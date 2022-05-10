@@ -17,7 +17,6 @@ public class WorkflowTemplate extends Auditable {
     private String description;
     private Integer version = 1;
 
-//    private List<TaskTemplate> tasks = new LinkedList<>();
     private Map<Integer, TaskTemplate> tasks = new HashMap();
     private List<String> inputParameters = new LinkedList<>();
     private Map<String, Object> outputParameters = new HashMap<>();
@@ -29,7 +28,7 @@ public class WorkflowTemplate extends Auditable {
     //工作流失败处理逻辑
     private String failureWorkflow;
     // 是否可以重启工作流
-    private boolean restartable = true;
+    private boolean restartable = false;
 
 //    private boolean workflowStatusListenerEnabled = false;
 

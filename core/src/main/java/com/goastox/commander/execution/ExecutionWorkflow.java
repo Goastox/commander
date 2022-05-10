@@ -1,14 +1,13 @@
 package com.goastox.commander.execution;
 
-import com.goastox.commander.common.TaskType;
 import com.goastox.commander.common.WorkflowStatus;
 import com.goastox.commander.common.entity.Workflow;
 import com.goastox.commander.common.template.WorkflowTemplate;
 import com.goastox.commander.core.Node;
 import com.goastox.commander.core.NodeBuilder;
 import com.goastox.commander.task.Start;
-import com.goastox.commander.task.WorkflowTask;
 import com.goastox.commander.utils.IDgenerator;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -39,7 +38,7 @@ public class ExecutionWorkflow {
         Map<Integer, Node> graph = NodeBuilder.format(workflowTemplate.getPainter());
         context.setPainter(graph);
         //解析全局入参
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = Maps.newHashMapWithExpectedSize(input.size());
         input.forEach( (k,v) -> map.put("workflow.input." +k, v) );
         context.setContextInput(map);
         //TODO 阻塞 还是参考netty设计思路

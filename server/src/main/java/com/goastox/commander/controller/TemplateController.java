@@ -13,9 +13,6 @@ import static com.goastox.commander.controller.RequestMappingConstants.TEMPLATE;
 @RequestMapping(value = TEMPLATE)
 public class TemplateController {
 
-    //工作流模板 增删改查
-
-    //  task 增删改查
     @Resource
     private TemplateServiceImpl templateService;
 

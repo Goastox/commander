@@ -30,24 +30,7 @@ public class TemplateServiceImpl {
             throw new ApplicationException(Code.INVALID_INPUT,
                     "Workflow name cannot contain the following set of characters: ':'");
         }
-        Map<Integer, TaskTemplate> tasks = workflowTemplate.getTasks();
-        // 除首节点之外其他token不能为0，切其他节点的下游节点不能是首节点，检测节点token是否有重复值
-        Preconditions.checkArgument(tasks.get(START_TASK_TOKEN).getType() == TaskType.START_TASK,
-                "The start node of workflow must be START_TASK" );
-
-        HashMap<Integer, int[]> next = Maps.newHashMapWithExpectedSize(tasks.size());
-        HashMap<Integer, TaskType> type = Maps.newHashMapWithExpectedSize(tasks.size());
-        tasks.forEach( (k,v)->{
-            next.put(k,v.getNext());
-            type.put(k, v.getType());
-        });
-        // creating painter
-        Painter painter = Painter.size(tasks.size())
-                .tasks(next)
-                .type(type)
-                .create();
-        workflowTemplate.setPainter(painter.graph());
-
+        Painter painter = this.detection(workflowTemplate);
         workflowTemplate.setCreateTime(System.currentTimeMillis());
         metadataMapper.createWorkflowTemplate(workflowTemplate);
         log.info("template created successfully");
@@ -77,8 +60,32 @@ public class TemplateServiceImpl {
     }
 
     public void updateWorkflowTemplate(WorkflowTemplate template){
+        Painter painter = this.detection(template);
         template.setUpdateTime(System.currentTimeMillis());
         metadataMapper.updateWorkflowTemplate(template);
+        log.info("template updated successfully");
+        Set<Integer> inverted = painter.getInverted();
+        Preconditions.checkWaring(inverted.isEmpty(), String.format("Waring cycle: %s", inverted.toString()));
+    }
+
+    public Painter detection(WorkflowTemplate workflowTemplate){
+        Map<Integer, TaskTemplate> tasks = workflowTemplate.getTasks();
+        // 除首节点之外其他token不能为0，切其他节点的下游节点不能是首节点，检测节点token是否有重复值
+        Preconditions.checkArgument(tasks.get(START_TASK_TOKEN).getType() == TaskType.START_TASK,
+                "The start node of workflow must be START_TASK" );
+        HashMap<Integer, int[]> next = Maps.newHashMapWithExpectedSize(tasks.size());
+        HashMap<Integer, TaskType> type = Maps.newHashMapWithExpectedSize(tasks.size());
+        tasks.forEach( (k,v)->{
+            next.put(k,v.getNext());
+            type.put(k, v.getType());
+        });
+        // creating painter
+        Painter painter = Painter.size(tasks.size())
+                .tasks(next)
+                .type(type)
+                .create();
+        workflowTemplate.setPainter(painter.graph());
+        return painter;
     }
 
 }

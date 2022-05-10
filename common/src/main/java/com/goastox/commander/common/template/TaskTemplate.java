@@ -11,6 +11,8 @@ public class TaskTemplate {
     private Integer token;
 
     private String referenceName;
+    private String description;
+
     private TaskType type;
     private int[] next;
     private Map<String, Object> inputParameters = new HashMap<>();
@@ -21,7 +23,7 @@ public class TaskTemplate {
     private String scriptExpression;
     private Map<String, Integer> decisionCases = new HashMap<>();//可选项
 
-    private int startDelay;
+    // 根据不同类型的task 灵活的拓展字段
 
     private String condition;
 
