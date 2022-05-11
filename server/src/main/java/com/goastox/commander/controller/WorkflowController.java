@@ -18,10 +18,10 @@ public class WorkflowController {
         return null;
     }
 
-    @GetMapping("{name}")
-    public Map<Object, Object> startWorkflow(@PathVariable("name") String name,
-                                             @RequestParam(value = "version", required = false) Integer version,
-                                             Map<String, Object> input){
+    @PostMapping("{name}")
+    public Map<String, Object> startWorkflow(@PathVariable("name") String name,
+                                             @PathVariable(value = "version", required = false) Integer version,
+                                             @RequestBody Map<String, Object> input){
         return workflowService.startWorkflow(name, version, input);
     }
 

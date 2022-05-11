@@ -20,12 +20,19 @@ public class Start extends WorkflowTask {
     }
 
     @Override
-    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
+    public Task execute(ContextWorkflow contextWorkflow, int token) {
         Map<Integer, TaskTemplate> tasks = contextWorkflow.getTasks();
+
+        Map<Integer, Node> painter = contextWorkflow.getPainter();
+        Node node = painter.get(token);
+        node.toCompleted();
+
+
+
         Task task = new Task();
         task.setType(TaskType.START_TASK);
         task.setToken(token);
-        graph.get(token).toCompleted();
+//        graph.get(token).toCompleted();
         log.info("首节点success");
         return task;
     }

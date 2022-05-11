@@ -1,5 +1,6 @@
 package com.goastox.commander.execution;
 
+import com.alibaba.fastjson.JSON;
 import com.goastox.commander.common.WorkflowStatus;
 import com.goastox.commander.common.entity.Workflow;
 import com.goastox.commander.common.template.WorkflowTemplate;
@@ -7,17 +8,16 @@ import com.goastox.commander.core.Node;
 import com.goastox.commander.core.NodeBuilder;
 import com.goastox.commander.task.Start;
 import com.goastox.commander.utils.IDgenerator;
-import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @Service
 public class ExecutionWorkflow {
 
-
-    public Map<Object, Object> startWorkflow(WorkflowTemplate workflowTemplate, Map<String, Object> input) {
+    private static final Integer START_TASK_TOKEN = 0;
+    public Map<String, Object> startWorkflow(WorkflowTemplate workflowTemplate, Map<String, Object> input) {
 
         // TODO 不需要考虑模板加锁问题
 
@@ -38,13 +38,20 @@ public class ExecutionWorkflow {
         Map<Integer, Node> graph = NodeBuilder.format(workflowTemplate.getPainter());
         context.setPainter(graph);
         //解析全局入参
-        HashMap<String, Object> map = Maps.newHashMapWithExpectedSize(input.size());
-        input.forEach( (k,v) -> map.put("workflow.input." +k, v) );
-        context.setContextInput(map);
-        //TODO 阻塞 还是参考netty设计思路
-        new Start().callback(context, graph, 0);
+        Properties properties = new Properties();
+        input.forEach( (k,v) -> properties.setProperty("workflow.input." +k, (String) v) );
+        context.setContextParams(properties);
+        //  正常阻塞 后期服务改为 webflux
+        new Start().callback(context, START_TASK_TOKEN);
+        try {
+            synchronized (context.lock){
+                context.lock.wait();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-        return null;
+        return workflow.getOutput();
     }
 
 

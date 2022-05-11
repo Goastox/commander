@@ -15,7 +15,7 @@ public class TaskTemplate {
 
     private TaskType type;
     private int[] next;
-    private Map<String, Object> inputParameters = new HashMap<>();
+    private Map<String, String> inputTemplate = new HashMap<>();
 
     //分支参数
     private String caseParam;

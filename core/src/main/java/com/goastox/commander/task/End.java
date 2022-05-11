@@ -16,12 +16,12 @@ public class End extends WorkflowTask{
     }
 
     @Override
-    public Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token) {
+    public Task execute(ContextWorkflow contextWorkflow, int token) {
         Task task = new Task();
         task.setToken(token);
         task.setType(TaskType.END_TASK);
         System.out.println("尾节点");
-        graph.get(token).toCompleted();
+//        graph.get(token).toCompleted();
         return task;
     }
 }

@@ -58,12 +58,19 @@ public class Node {
         this.compareAndSet(node.get(), (node.get() & (~WEIGHT_MAX)) | (weight << BIT_WEIGHT));
     }
 
-    public int decrementWeight(){
+    // TODO 并行问题
+    public synchronized int decrementWeight(){
         int weight = this.getWeight() - 1;
         this.compareAndSet(node.get(), (node.get() & (~WEIGHT_MAX)) | ( weight << BIT_WEIGHT));
         return weight;
     }
 
+
+//    public int decrementWeight(){
+//        int weight = this.getWeight() - 1;
+//        node.set((node.get() & (~WEIGHT_MAX)) | ( weight << BIT_WEIGHT));
+//        return weight;
+//    }
 
 
     // TODO 负权节点需要考虑修改负权

@@ -7,13 +7,10 @@ import com.goastox.commander.execution.ContextWorkflow;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.concurrent.locks.Condition;
-
 @Component
-public class Simple extends WorkflowTask{
-
-    public Simple() {
-        super(TaskType.SIMPLE);
+public class DecisionPlus extends WorkflowTask{
+    public DecisionPlus() {
+        super(TaskType.DECISION_PLUS);
     }
 
     @Override

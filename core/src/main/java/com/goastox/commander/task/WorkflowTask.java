@@ -24,7 +24,7 @@ public abstract class WorkflowTask{
         return registry.get(type);
     }
 
-    public abstract Task execute(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token);
+    public abstract Task execute(ContextWorkflow contextWorkflow, int token);
 
     public void start(){
     }
@@ -37,8 +37,8 @@ public abstract class WorkflowTask{
 
     }
 
-    public final void callback(ContextWorkflow contextWorkflow, Map<Integer, Node> graph, int token){
-        Task task = this.execute(contextWorkflow, graph, token);
+    public final void callback(ContextWorkflow contextWorkflow, int token){
+        Task task = this.execute(contextWorkflow, token);
         contextWorkflow.decide(task.getToken());
     }
 

@@ -19,7 +19,7 @@ public class WorkflowTemplate extends Auditable {
 
     private Map<Integer, TaskTemplate> tasks = new HashMap();
     private List<String> inputParameters = new LinkedList<>();
-    private Map<String, Object> outputParameters = new HashMap<>();
+    private Map<String, String> outputParameters = new HashMap<>();
 
 
     //当前文件结构版本

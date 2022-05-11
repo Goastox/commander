@@ -17,7 +17,7 @@ public class WorkflowServiceImpl {
     private ExecutionWorkflow executionWorkflow;
 
     // TODO 子任务，同步，异步
-    public Map<Object, Object> startWorkflow(String name, Integer version, Map<String, Object> input){
+    public Map<String, Object> startWorkflow(String name, Integer version, Map<String, Object> input){
         WorkflowTemplate workflowTemplate = templateService.getWorkflowTemplate(name, version);
         if (workflowTemplate == null) {
             throw new ApplicationException(ApplicationException.Code.NOT_FOUND,
