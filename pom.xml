@@ -21,6 +21,7 @@
         <module>common</module>
         <module>server</module>
         <module>redis-persistence</module>
+        <module>decision</module>
     </modules>
 
     <packaging>pom</packaging>
