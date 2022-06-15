@@ -1,4 +1,4 @@
-package com.goastox.decision.Lexer;
+package com.goastox.decision.lexer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,7 +62,10 @@ public class Lexer {
                         state = 8;
                         word.add(c);
                         c = stream.read();
-                    }else {
+                    } else if (c == 0x20) {
+                        state = 0;
+                        c = stream.read();
+                    } else {
                         state = 15;
                         word.add(c);
                         c = stream.read();
