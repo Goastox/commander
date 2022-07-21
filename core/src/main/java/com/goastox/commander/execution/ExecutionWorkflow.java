@@ -17,6 +17,8 @@ import java.util.Properties;
 public class ExecutionWorkflow {
 
     private static final Integer START_TASK_TOKEN = 0;
+
+    // 参考flink架构设计，client负责图构建，master负责作业调度，worker负责任务执行
     public Map<String, Object> startWorkflow(WorkflowTemplate workflowTemplate, Map<String, Object> input) {
 
         // TODO 不需要考虑模板加锁问题
