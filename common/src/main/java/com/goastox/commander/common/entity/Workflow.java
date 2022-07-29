@@ -2,7 +2,7 @@ package com.goastox.commander.common.entity;
 
 import com.goastox.commander.common.Auditable;
 import com.goastox.commander.common.WorkflowStatus;
-import com.goastox.commander.common.template.WorkflowTemplate;
+import com.goastox.commander.common.template.WorkflowTempRequest;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class Workflow extends Auditable {
     private long endTime;
     private WorkflowStatus status;
 
-    private WorkflowTemplate template;
+    private WorkflowTempRequest template;
 
     private Map<Integer, AtomicLong> graph;
 }

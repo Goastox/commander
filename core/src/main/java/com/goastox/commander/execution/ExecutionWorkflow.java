@@ -1,9 +1,8 @@
 package com.goastox.commander.execution;
 
-import com.alibaba.fastjson.JSON;
 import com.goastox.commander.common.WorkflowStatus;
 import com.goastox.commander.common.entity.Workflow;
-import com.goastox.commander.common.template.WorkflowTemplate;
+import com.goastox.commander.common.template.WorkflowTempRequest;
 import com.goastox.commander.core.Node;
 import com.goastox.commander.core.NodeBuilder;
 import com.goastox.commander.task.Start;
@@ -19,7 +18,9 @@ public class ExecutionWorkflow {
     private static final Integer START_TASK_TOKEN = 0;
 
     // 参考flink架构设计，client负责图构建，master负责作业调度，worker负责任务执行
-    public Map<String, Object> startWorkflow(WorkflowTemplate workflowTemplate, Map<String, Object> input) {
+    // akka 分布式通信
+
+    public Map<String, Object> startWorkflow(WorkflowTempRequest workflowTempRequest, Map<String, Object> input) {
 
         // TODO 不需要考虑模板加锁问题
 
@@ -30,14 +31,14 @@ public class ExecutionWorkflow {
         workflow.setWorkflowId(workflowId);
         workflow.setStatus(WorkflowStatus.RUNNING);
         workflow.setInput(input);
-        workflow.setGraph(workflowTemplate.getPainter());
+        workflow.setGraph(workflowTempRequest.getPainter());
         workflow.setCreatedBy(null);
         workflow.setCreateTime(System.currentTimeMillis());
 
         //创建工作流实例上下文
         ContextWorkflow context = new ContextWorkflow();
-        context.setTasks(workflowTemplate.getTasks());
-        Map<Integer, Node> graph = NodeBuilder.format(workflowTemplate.getPainter());
+        context.setTasks(workflowTempRequest.getTasks());
+        Map<Integer, Node> graph = NodeBuilder.format(workflowTempRequest.getPainter());
         context.setPainter(graph);
         //解析全局入参
         Properties properties = new Properties();

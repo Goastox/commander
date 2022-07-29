@@ -1,22 +1,22 @@
 package com.goastox.commander.mapper;
 
-import com.goastox.commander.common.template.WorkflowTemplate;
+import com.goastox.commander.common.template.WorkflowTempRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MetadataMapper {
 
-    void createWorkflowTemplate(WorkflowTemplate workflowTemplate);
+    void createWorkflowTemplate(WorkflowTempRequest workflowTempRequest);
 
-    void updateWorkflowTemplate(WorkflowTemplate workflowTemplate);
+    void updateWorkflowTemplate(WorkflowTempRequest workflowTempRequest);
 
     void removeWorkflowTemplate(String name, Integer version);
 
-    List<WorkflowTemplate> getAllWorkflowTemplate();
+    List<WorkflowTempRequest> getAllWorkflowTemplate();
 
-    Optional<WorkflowTemplate> getWorkflowTemplate(String name, Integer version);
+    Optional<WorkflowTempRequest> getWorkflowTemplate(String name, Integer version);
 
-    Optional<WorkflowTemplate> getLatestWorkflowTemplate(String name);
+    Optional<WorkflowTempRequest> getLatestWorkflowTemplate(String name);
 
 }

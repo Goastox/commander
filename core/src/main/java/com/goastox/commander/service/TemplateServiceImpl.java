@@ -1,8 +1,8 @@
 package com.goastox.commander.service;
 
 import com.goastox.commander.common.TaskType;
-import com.goastox.commander.common.template.TaskTemplate;
-import com.goastox.commander.common.template.WorkflowTemplate;
+import com.goastox.commander.common.template.TaskTempRequest;
+import com.goastox.commander.common.template.WorkflowTempRequest;
 import com.goastox.commander.core.Painter;
 import com.goastox.commander.exception.ApplicationException;
 import com.goastox.commander.exception.ApplicationException.Code;
@@ -25,14 +25,14 @@ public class TemplateServiceImpl {
     private MetadataMapper metadataMapper;
 
 
-    public void registerWorkflowTemplate(WorkflowTemplate workflowTemplate){
-        if(workflowTemplate.getName().contains(":")){
+    public void registerWorkflowTemplate(WorkflowTempRequest workflowTempRequest){
+        if(workflowTempRequest.getName().contains(":")){
             throw new ApplicationException(Code.INVALID_INPUT,
                     "Workflow name cannot contain the following set of characters: ':'");
         }
-        Painter painter = this.detection(workflowTemplate);
-        workflowTemplate.setCreateTime(System.currentTimeMillis());
-        metadataMapper.createWorkflowTemplate(workflowTemplate);
+        Painter painter = this.detection(workflowTempRequest);
+        workflowTempRequest.setCreateTime(System.currentTimeMillis());
+        metadataMapper.createWorkflowTemplate(workflowTempRequest);
         log.info("template created successfully");
         Set<Integer> inverted = painter.getInverted();
         Preconditions.checkWaring(inverted.isEmpty(), String.format("Waring cycle: %s", inverted.toString()));
@@ -40,8 +40,8 @@ public class TemplateServiceImpl {
 
 
 
-    public WorkflowTemplate getWorkflowTemplate(String name, Integer version){
-        Optional<WorkflowTemplate> template;
+    public WorkflowTempRequest getWorkflowTemplate(String name, Integer version){
+        Optional<WorkflowTempRequest> template;
         if (version == null){
             template = metadataMapper.getLatestWorkflowTemplate(name);
         }else{
@@ -51,7 +51,7 @@ public class TemplateServiceImpl {
                 String.format("No such workflow found by name: %s, version: %d", name, version)));
     }
 
-    public List<WorkflowTemplate> getAll(){
+    public List<WorkflowTempRequest> getAll(){
         return metadataMapper.getAllWorkflowTemplate();
     }
 
@@ -59,7 +59,7 @@ public class TemplateServiceImpl {
         metadataMapper.removeWorkflowTemplate(name, version);
     }
 
-    public void updateWorkflowTemplate(WorkflowTemplate template){
+    public void updateWorkflowTemplate(WorkflowTempRequest template){
         Painter painter = this.detection(template);
         template.setUpdateTime(System.currentTimeMillis());
         metadataMapper.updateWorkflowTemplate(template);
@@ -68,8 +68,8 @@ public class TemplateServiceImpl {
         Preconditions.checkWaring(inverted.isEmpty(), String.format("Waring cycle: %s", inverted.toString()));
     }
 
-    public Painter detection(WorkflowTemplate workflowTemplate){
-        Map<Integer, TaskTemplate> tasks = workflowTemplate.getTasks();
+    public Painter detection(WorkflowTempRequest workflowTempRequest){
+        Map<Integer, TaskTempRequest> tasks = workflowTempRequest.getTasks();
         // 除首节点之外其他token不能为0，切其他节点的下游节点不能是首节点，检测节点token是否有重复值
         Preconditions.checkArgument(tasks.get(START_TASK_TOKEN).getType() == TaskType.START_TASK,
                 "The start node of workflow must be START_TASK" );
@@ -84,7 +84,7 @@ public class TemplateServiceImpl {
                 .tasks(next)
                 .type(type)
                 .create();
-        workflowTemplate.setPainter(painter.graph());
+        workflowTempRequest.setPainter(painter.graph());
         return painter;
     }
 

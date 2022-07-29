@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Data
-public class WorkflowTemplate extends Auditable {
+public class WorkflowTempRequest extends Auditable {
 
     private String name;
     private String description;
     private Integer version = 1;
 
-    private Map<Integer, TaskTemplate> tasks = new HashMap();
+    private Map<Integer, TaskTempRequest> tasks = new HashMap();
     private List<String> inputParameters = new LinkedList<>();
     private Map<String, String> outputParameters = new HashMap<>();
 

@@ -1,4 +1,4 @@
-package com.goastox.decision.Lexer;
+package com.goastox.decision.lexer;
 
 public final class Word {
 

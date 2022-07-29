@@ -1,8 +1,8 @@
 package com.goastox.commander.execution;
 
 import com.goastox.commander.common.entity.Workflow;
-import com.goastox.commander.common.template.TaskTemplate;
-import com.goastox.commander.common.template.WorkflowTemplate;
+import com.goastox.commander.common.template.TaskTempRequest;
+import com.goastox.commander.common.template.WorkflowTempRequest;
 import com.goastox.commander.core.Node;
 import com.goastox.commander.task.WorkflowTask;
 import com.goastox.commander.utils.SpringContextUtil;
@@ -20,7 +20,7 @@ public class ContextWorkflow {
 
     private Workflow workflow;
 
-    private WorkflowTemplate workflowTemplate;
+    private WorkflowTempRequest workflowTempRequest;
 
     private Properties contextParams;
 
@@ -28,7 +28,7 @@ public class ContextWorkflow {
 
     private Map<Integer, Node> painter;
 
-    private Map<Integer, TaskTemplate> tasks;
+    private Map<Integer, TaskTempRequest> tasks;
 
     public Object lock = new Object();
 

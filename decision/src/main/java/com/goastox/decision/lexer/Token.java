@@ -1,4 +1,4 @@
-package com.goastox.decision.Lexer;
+package com.goastox.decision.lexer;
 
 public class Token {
 
@@ -23,7 +23,6 @@ public class Token {
     public String getTypeStr() {
         return typeStr;
     }
-
     public void setTypeStr(String typeStr) {
         this.typeStr = typeStr;
     }

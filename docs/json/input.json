@@ -1,0 +1,26 @@
+{
+  "name":"test1",
+  "version":3,
+  "inputParameters":["param1","param2","param3"],
+  "tasks":{
+    "0":{
+      "type":"START_TASK",
+      "next":[1,2]
+    },
+    "1":{
+      "inputParameters": {
+        "p1": "${workflow.input.param1}",
+        "p2": "${workflow.input.param2}"
+      },
+      "type":"HTTP",
+      "next":[3]
+    },
+    "2":{
+      "type":"HTTP",
+      "next":[3]
+    },
+    "3":{
+      "type":"END_TASK"
+    }
+  }
+}

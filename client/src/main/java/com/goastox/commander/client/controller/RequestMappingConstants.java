@@ -1,4 +1,4 @@
-package com.goastox.commander.controller;
+package com.goastox.commander.client.controller;
 
 public interface RequestMappingConstants {
 

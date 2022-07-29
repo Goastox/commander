@@ -1,0 +1,10 @@
+
+import com.goastox.decision.test.Person
+global java.util.List my;
+rule "a1"
+    when
+        $person:Person(name >= 100)
+    then
+        my.add("返参");
+        System.out.println("----------------------------------");
+end

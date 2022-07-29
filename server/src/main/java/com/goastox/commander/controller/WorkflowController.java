@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
-import static com.goastox.commander.controller.RequestMappingConstants.WORKFLOW;
 
 @RestController
-@RequestMapping(value = WORKFLOW)
+@RequestMapping("api/workflow")
 public class WorkflowController {
     @Autowired
     private WorkflowServiceImpl workflowService;
