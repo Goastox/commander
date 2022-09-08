@@ -1,6 +1,8 @@
 package com.goastox.commander.common;
 
 public enum WorkflowStatus {
+
+    INIT(false, false),
     /**
      * 运行中
      */

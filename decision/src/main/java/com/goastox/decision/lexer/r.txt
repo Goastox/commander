@@ -1,0 +1,47 @@
+2+3+-4*5$$$
+
+i = num|E|String
+x = 2;
+x = 3+4;
+x = 'nejgnervidvmvd';
+x = 'fvf' + 3;
+
+x+y*5
+2+5+4*6
+
+
+if()
+
+if(true){
+
+}else if(){
+
+}else{
+
+}
+
+switch(''){
+    case '':
+    case '':
+    default:
+}
+
+
+for(E){
+    continue;
+    break;
+}
+
+while(true){
+   continue;
+   break;
+}
+
+do{
+
+}while(true);
+
+
+T = F|T*E|T/E
+E = T|E+T|E-T
+F = (E)|num

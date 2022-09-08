@@ -42,4 +42,19 @@ public class Token {
     public void setError(String error) {
         this.error = error;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"typeInt\":")
+                .append(typeInt);
+        sb.append(",\"typeStr\":\"")
+                .append(typeStr).append('\"');
+        sb.append(",\"code\":\"")
+                .append(code).append('\"');
+        sb.append(",\"error\":\"")
+                .append(error).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }

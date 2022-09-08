@@ -11,7 +11,7 @@ import static com.goastox.commander.core.Protocol.*;
 
 public class Node {
 
-    private AtomicLong node;
+    private volatile AtomicLong node;
 
     public Node(AtomicLong node){
         this.node = node;

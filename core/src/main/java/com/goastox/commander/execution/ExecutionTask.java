@@ -22,6 +22,8 @@ public class ExecutionTask {
                 new ArrayBlockingQueue<>(5),
                 name, new ThreadPoolExecutor.AbortPolicy());
 //        threadPoolExecutor.getPoolSize();
+//        threadPoolExecutor.getQueue().
+
         return threadPoolExecutor;
     }
 }

@@ -1,0 +1,20 @@
+server:
+  port: 8052
+  servlet:
+    context-path: /commander
+spring:
+  application:
+    name: commander
+  redis:
+    database: 1
+    password: 123456
+    cluster:
+      nodes: localhost:6379
+  threads:
+    http:
+      name: httpThread
+      core-pool-size: 1
+      maximum-pool-size: 2
+      keep-alive-time: 5000
+      unit: seconds
+      handler: abort_policy

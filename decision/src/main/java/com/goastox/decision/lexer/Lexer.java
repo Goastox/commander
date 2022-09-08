@@ -45,12 +45,12 @@ public class Lexer {
             switch (state){
                 case 0:
                     word = new Word();
-                    if (c == 0x2D){//  - 负数
+                    /*if (c == 0x2D){//  - 负数 词法分析拆开，语法分析做特殊处理
                         state = 1;
                         word.add(c);
                         c = stream.read();
                     }
-                    else if (isNumber(c)){
+                    else*/ if (isNumber(c)){
                         state = 2;
                         word.add(c);
                         c = stream.read();
@@ -187,12 +187,12 @@ public class Lexer {
                     break;
                 case 13:
                     // 注释块
-                    tokens.add(new Token(BLOCK_NOTE, word.toString()));
+//                    tokens.add(new Token(BLOCK_NOTE, word.toString()));
                     state = 0;
                     break;
                 case 14:
                     // 一行注释
-                    tokens.add(new Token(NOTE, word.toString()));
+//                    tokens.add(new Token(NOTE, word.toString()));
                     state = 0;
                     break;
                 case 15:
@@ -254,5 +254,12 @@ public class Lexer {
             }
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+
+        int a = 3*-2;
+        System.out.println(a);
+
     }
 }

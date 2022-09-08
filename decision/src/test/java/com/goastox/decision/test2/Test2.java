@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class Test2 {
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         System.out.println(Double.MAX_VALUE);
 
         BigDecimal bigDecimal = new BigDecimal("1.635637775333E10");
@@ -19,5 +19,11 @@ public class Test2 {
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
         System.out.println(stringIntegerHashMap.get("") == null);
 
+    }
+
+    public static void main(String[] args) {
+        for (;; main2(null)){
+
+        }
     }
 }

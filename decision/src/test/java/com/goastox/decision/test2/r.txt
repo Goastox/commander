@@ -1,2 +1,0 @@
-input sex;
-x1 = phone > 0 ? true : false;

@@ -33,6 +33,7 @@ public class ContextWorkflow {
     public Object lock = new Object();
 
     public ThreadPoolExecutor threadPoolExecutor = SpringContextUtil.getBean(ThreadPoolExecutor.class);
+    public TaskThreadPoolExecutor http = SpringContextUtil.getBean("", TaskThreadPoolExecutor.class);
 
     public void decide(Integer token){// 入参当前已执行成功的 token
         Node node = this.painter.get(token);
