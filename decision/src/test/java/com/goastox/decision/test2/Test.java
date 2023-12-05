@@ -40,11 +40,13 @@ public class Test {
     }
 
     public static int expr(){
-        return expr_tail(term());
+        int term = term();
+        return expr_tail(term);
     }
 
     public static int term(){
-       return term_tail(factor());
+        int factor = factor();
+        return term_tail(factor);
     }
 
 
@@ -90,5 +92,5 @@ public class Test {
             return var;
     }
 
-
+//3*3*3
 }

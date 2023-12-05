@@ -35,6 +35,9 @@ public class ContextWorkflow {
     public ThreadPoolExecutor threadPoolExecutor = SpringContextUtil.getBean(ThreadPoolExecutor.class);
     public TaskThreadPoolExecutor http = SpringContextUtil.getBean("", TaskThreadPoolExecutor.class);
 
+    // 需要追踪每个节点的调用情况，使用情况，统计
+    //对应task统计标签使用情况
+
     public void decide(Integer token){// 入参当前已执行成功的 token
         Node node = this.painter.get(token);
 
